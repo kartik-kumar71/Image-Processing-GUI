@@ -1,7 +1,7 @@
-import cv2
 import sys
-from PyQt5.QtWidgets import QWidget, QMessageBox, QApplication, QLabel, QDial, QComboBox
+from PyQt5.QtWidgets import QWidget, QMessageBox, QApplication, QLabel, QDial, QComboBox, QPushButton
 from PyQt5.QtGui import QPixmap
+from models.thresh import  Thresh_image
 
 
 class Image(QWidget):
@@ -19,6 +19,7 @@ class Image(QWidget):
         self.im_label = QLabel(self)
         self.cb1 = QComboBox(self)
         self.cb2 = QComboBox(self)
+        self.reset_button = QPushButton("Revert changes",self)
         self.initUI()
 
 
@@ -39,6 +40,8 @@ class Image(QWidget):
         self.cb1.addItems(["BINARY", "BINARY_INV","TRUNC","TOZERO","TOZERO_INV"])
         self.cb1.move(40,380)
         self.cb2.move(280,380)
+
+        self.reset_button.move(200,600)
         
         self.show()
 
