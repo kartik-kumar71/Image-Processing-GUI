@@ -1,8 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QWidget, QMessageBox, QApplication, QLabel, QDial, QComboBox, QPushButton
-from PyQt5.QtGui import QPixmap
-from models.thresh import  Thresh_image
-
+from PyQt5.QtGui import QPixmap, QImage
+import cv2
 
 class Image(QWidget):
     def __init__(self,image_path):
@@ -13,9 +12,12 @@ class Image(QWidget):
         self.width = 500
         self.height = 680
         self.image_path = image_path
+        image = cv2.imread(self.image_path)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        qim = QImage(gray.data,gray.shape[1],gray.shape[0],QImage.Format_Grayscale8)
         self.dial1 = QDial(self)
         self.dial2 = QDial(self)
-        self.im = QPixmap(self.image_path).scaled(260,260)
+        self.im = QPixmap(qim).scaled(260,260)
         self.im_label = QLabel(self)
         self.cb1 = QComboBox(self)
         self.cb2 = QComboBox(self)
