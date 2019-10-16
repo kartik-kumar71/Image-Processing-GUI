@@ -10,7 +10,7 @@ class Image(QWidget):
         self.left = 10
         self.top = 10
         self.width = 500
-        self.height = 680
+        self.height = 250
         self.thresh_type = "cv2.THRESH_BINARY"
         self.image_path = image_path
         self.image = cv2.imread(self.image_path)
@@ -32,17 +32,18 @@ class Image(QWidget):
         self.dial1.setMaximum(255)
         self.dial2.setMinimum(0)
         self.dial2.setMaximum(255)
-        self.dial1.move(20,420)
-        self.dial2.move(120,420)
+        self.dial1.move(20,130)
+        self.dial2.move(120,130)
         self.dial1.valueChanged.connect(self.dial1_changed)
         self.dial2.valueChanged.connect(self.dial2_changed)
 
         self.cb1.addItems(["BINARY", "BINARY_INV","TRUNC","TOZERO","TOZERO_INV"])
         self.cb1.activated[str].connect(self.combo1_selection)
-        self.cb1.move(40,380)
-        self.cb2.move(280,380)
+        self.cb1.move(40,50)
+        self.cb2.move(280,50)
 
-        self.reset_button.move(200,600)
+        self.reset_button.move(280,170)
+        self.reset_button.clicked.connect(self.revert_button_pressed)
         
         
         self.show()
@@ -61,6 +62,11 @@ class Image(QWidget):
     def combo1_selection(self,text):
         self.thresh_type = "cv2.THRESH_" + text
         self.thresh()
+
+    def revert_button_pressed(self):
+        cv2.imshow('image',self.image_gray)
+        self.dial1.setValue(0)
+        self.dial2.setValue(0)
         
 
 
