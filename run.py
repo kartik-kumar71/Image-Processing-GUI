@@ -11,6 +11,7 @@ class Image(QWidget):
         self.top = 10
         self.width = 500
         self.height = 680
+        self.thresh_type = "cv2.THRESH_BINARY"
         self.image_path = image_path
         self.image = cv2.imread(self.image_path)
         self.image_gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
@@ -27,10 +28,6 @@ class Image(QWidget):
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-                
-        #self.im_label.setPixmap(self.im)
-        #self.im_label.move(120,40)
-
         self.dial1.setMinimum(0)
         self.dial1.setMaximum(255)
         self.dial2.setMinimum(0)
@@ -41,6 +38,7 @@ class Image(QWidget):
         self.dial2.valueChanged.connect(self.dial2_changed)
 
         self.cb1.addItems(["BINARY", "BINARY_INV","TRUNC","TOZERO","TOZERO_INV"])
+        self.cb1.activated[str].connect(self.combo1_selection)
         self.cb1.move(40,380)
         self.cb2.move(280,380)
 
@@ -48,21 +46,23 @@ class Image(QWidget):
         
         
         self.show()
+    def thresh(self):
+        _, temp = cv2.threshold(self.image_gray,self.dial1.value(),self.dial2.value(),eval(self.thresh_type))
+        self.updateImage(temp)
 
     def updateImage(self,gray):
-        """
-        qim = QImage(gray.data,gray.shape[1],gray.shape[0],gray.shape[1]*3,QImage.Format_RGB888)
-        self.im = QPixmap(qim).scaled(260,260)
-        self.im_label.setPixmap(self.im)
-        """
         cv2.imshow('image',gray)
 
+
     def dial1_changed(self):
-        _, temp = cv2.threshold(self.image_gray,self.dial1.value(),self.dial2.value(),cv2.THRESH_BINARY)
-        self.updateImage(temp)
+        self.thresh()
     def dial2_changed(self):
-        _, temp = cv2.threshold(self.image_gray,self.dial1.value(),self.dial2.value(),cv2.THRESH_BINARY)
-        self.updateImage(temp)
+        self.thresh()
+    def combo1_selection(self,text):
+        self.thresh_type = "cv2.THRESH_" + text
+        self.thresh()
+        
+
 
 
 
