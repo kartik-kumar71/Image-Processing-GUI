@@ -20,7 +20,10 @@ class Image(QWidget):
         self.im_label = QLabel(self)
         self.cb1 = QComboBox(self)
         self.cb2 = QComboBox(self)
+        self.label1 = QLabel(self)
+        self.label2 = QLabel(self)
         self.reset_button = QPushButton("Revert changes",self)
+        
         self.updateImage(self.image_gray)
         self.initUI()
 
@@ -44,6 +47,11 @@ class Image(QWidget):
 
         self.reset_button.move(280,170)
         self.reset_button.clicked.connect(self.revert_button_pressed)
+
+        self.label1.setText("000")
+        self.label2.setText("000")
+        self.label1.move(60,120)
+        self.label2.move(160,120)
         
         
         self.show()
@@ -57,8 +65,12 @@ class Image(QWidget):
 
     def dial1_changed(self):
         self.thresh()
+        self.change_labels()
+
     def dial2_changed(self):
         self.thresh()
+        self.change_labels()
+
     def combo1_selection(self,text):
         self.thresh_type = "cv2.THRESH_" + text
         self.thresh()
@@ -67,6 +79,10 @@ class Image(QWidget):
         cv2.imshow('image',self.image_gray)
         self.dial1.setValue(0)
         self.dial2.setValue(0)
+
+    def change_labels(self):
+        self.label1.setText(str(self.dial1.value()))
+        self.label2.setText(str(self.dial2.value()))
         
 
 
