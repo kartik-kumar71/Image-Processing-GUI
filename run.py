@@ -91,6 +91,9 @@ class Image(QWidget):
 
 
 if __name__ == "__main__":
-    myapp = QApplication(sys.argv)
-    ex = Image(sys.argv[1])
-    sys.exit(myapp.exec_())
+    try:
+        myapp = QApplication(sys.argv)
+        ex = Image(sys.argv[1])
+        sys.exit(myapp.exec_())
+    except IndexError as i:
+        print("Please specify the image in the command line argument")
